@@ -6,12 +6,16 @@ tarballs can take a long time. ``pip2pi`` helps to alleviate these problems by
 making it blindingly simple to maintain a PyPI-compatible repository of packages
 your software depends on.
 
+
 Status
 ------
 
 These tools were developed to be used internally, and they appear to work for
-me. I'm going to be polishing them up a bit, turning them into a proper Python
-package, etc... But they should be functional for now.
+me. A quick glance at the code will make it obvious that they are far from
+robust (ex, they probably won't work on Windows and they make a few calls to
+shell commands that could be implemented in Python)... But they should work,
+and they shouldn't eat your data or steal private keys or anything.
+
 
 Requirements
 ------------
@@ -47,12 +51,13 @@ can be specified in any format that ``pip`` recognizes::
     $ cat requirements.txt
     foo==1.2
     http://example.com/baz-0.3.tar.gz
-    $ pip2tgz packages/ -r requirements.txt
+    $ pip2tgz packages/ -r requirements.txt bam-2.3/
     ...
     $ ls packages/
     foo-1.2.tar.gz
     bar-0.8.tar.gz
     baz-0.3.tar.gz
+    bam-2.3.tar.gz
 
 
 Building a Package Index
@@ -80,6 +85,20 @@ A directory full of ``.tar.gz`` files can be turned into PyPI-compatible
     packages/simple/foo/foo-1.2.tar.gz
 
 
+But that's a lot of work...
+---------------------------
+
+If running two commands seems like too much work... Take heart! The ``pip2pi``
+command will run both of them for you, **and** it will even use ``rsync`` copy
+the new packages and index to a remote host!
+
+::
+    $ pip2pi example.com:/var/www/packages/ foo==1.2
+    ...
+    $ curl -I http://example.com/packages/simple/foo/foo-1.2.tar.gz | head -n1
+    HTTP/1.1 200 OK
+
+
 Using Your New Package Index
 ----------------------------
 
@@ -93,6 +112,7 @@ Or, once it has been mirrored, prefix you ``requirements.txt`` with
     $ cat requirements.txt
     --use-index=http://example.com/packages/simple/
     foo==1.2
+
 
 Keywords
 ========
