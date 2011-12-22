@@ -90,9 +90,8 @@ But that's a lot of work...
 
 If running two commands seems like too much work... Take heart! The ``pip2pi``
 command will run both of them for you, **and** it will even use ``rsync`` copy
-the new packages and index to a remote host!
+the new packages and index to a remote host! ::
 
-::
     $ pip2pi example.com:/var/www/packages/ foo==1.2
     ...
     $ curl -I http://example.com/packages/simple/foo/foo-1.2.tar.gz | head -n1
