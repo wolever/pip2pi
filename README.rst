@@ -59,13 +59,13 @@ Building a Package Index
 ------------------------
 
 A directory full of ``.tar.gz`` files can be turned into PyPI-compatible
-"simple" package index using the ``dir2pypi`` command::
+"simple" package index using the ``dir2pi`` command::
 
     $ ls packages/
     bar-0.8.tar.gz
     baz-0.3.tar.gz
     foo-1.2.tar.gz
-    $ dir2pypi packages/
+    $ dir2pi packages/
     $ find packages/
     packages/
     packages/bar-0.8.tar.gz
