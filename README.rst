@@ -89,13 +89,26 @@ But that's a lot of work...
 ---------------------------
 
 If running two commands seems like too much work... Take heart! The ``pip2pi``
-command will run both of them for you, **and** it will even use ``rsync`` copy
+command will run both of them for you... **And** it will use ``rsync`` to copy
 the new packages and index to a remote host! ::
 
     $ pip2pi example.com:/var/www/packages/ foo==1.2
     ...
     $ curl -I http://example.com/packages/simple/foo/foo-1.2.tar.gz | head -n1
     HTTP/1.1 200 OK
+
+
+But that's still too much work...
+.................................
+
+Take heart! Your shell's ``alias`` command can help. Add an alias like this to
+your shell's runtime configuration file (hint: ``~/.bashrc`` or similar)::
+
+    alias pip2acmeco="pip2pi dev.acmeco.com:/var/www/packages/
+
+Now updating your package index will be as simple as::
+
+    $ pip2acmeco foo==1.2 -r bar/requirements.txt
 
 
 Using Your New Package Index
