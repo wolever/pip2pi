@@ -28,7 +28,11 @@ Requirements
 Setup
 -----
 
-Create the directory which will contain the tarballs of required packages,
+Install ``pip2pi``::
+
+    $ pip install pip2pi
+
+And create the directory which will contain the tarballs of required packages,
 preferably somewhere under your web server's document root::
 
     $ mkdir /var/www/packages/
