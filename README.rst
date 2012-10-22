@@ -130,6 +130,15 @@ Or, once it has been mirrored, prefix you ``requirements.txt`` with
     foo==1.2
 
 
+Without a web server
+--------------------
+
+You can use your package index offline, too::
+
+    $ pip install --no-download --download-cache=/var/www/packages/ foo==1.2
+
+
+
 Keywords
 ========
 
