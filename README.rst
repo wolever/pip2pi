@@ -108,7 +108,7 @@ But that's still too much work...
 Take heart! Your shell's ``alias`` command can help. Add an alias like this to
 your shell's runtime configuration file (hint: ``~/.bashrc`` or similar)::
 
-    alias pip2acmeco="pip2pi dev.acmeco.com:/var/www/packages/
+    alias pip2acmeco="pip2pi dev.acmeco.com:/var/www/packages/"
 
 Now updating your package index will be as simple as::
 
