@@ -135,7 +135,7 @@ Without a web server
 
 You can use your package index offline, too::
 
-    $ pip install --no-download --download-cache=/var/www/packages/ foo==1.2
+    $ pip install --index-url=file:///var/www/packages/ foo==1.2
 
 
 
