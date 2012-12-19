@@ -11,8 +11,7 @@
 '''
 
 
-import sys
-from libpip2pi import cli
+from libpip2pi import main
 
 
-cli(sys.argv[1:])
+main()
