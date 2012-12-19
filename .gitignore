@@ -1,0 +1,11 @@
+*.py[cod]
+*debug*.py
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+# Vim
+*.swp
