@@ -98,7 +98,7 @@ def bundle_to_tgz(bundle, tempdir='/tmp', outdir='/tmp'):
         output_name = os.path.join(outdir,
                                    os.path.relpath(new_input_dir,
                                                    tempdir) + ".tar.gz")
-        package = tarfile.TarFile(output_name, 'w')
+        package = tarfile.TarFile(output_name, 'w|gz')
         package.add(new_input_dir, recursive=True,
                     arcname=os.path.relpath(new_input_dir, tempdir))
         package.close()
