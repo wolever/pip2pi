@@ -40,19 +40,19 @@ class Requirements(object):
         return self._dict.iteritems()
 
 
-def parse_file(requirements, source_file):
-    '''
-    A simple requirements.txt file parser appending packets to an existing
-    Requirements object.
-    '''
-    required_list = open(source_file, 'r')
-    for line in required_list:
-        source = None
-        line = line.strip()
-        if not line or line.startswith('#'):
-            continue
-        elif line.startswith('--index-url'):
-            source = line
-        else:
-            requirements.add_package(line.strip(), source)
-    required_list.close()
+    def parse_file(self, source_file):
+        '''
+        A simple requirements.txt file parser appending packets to an existing
+        Requirements object.
+        '''
+        required_list = open(source_file, 'r')
+        for line in required_list:
+            source = None
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            elif line.startswith('--index-url'):
+                source = line
+            else:
+                self.add_package(line.strip(), source)
+        required_list.close()
