@@ -25,7 +25,8 @@ Setup
 
 Install ``pip2pi``::
 
-    $ pip install git+https://github.com/morgan-del/pip2pi.git
+    $ git clone https://github.com/morgan-del/pip2pi.git
+    # python setup.py install
 
 
 Create your repository
