@@ -4,6 +4,9 @@
     ~~~~~~~~~~~~~~~~~
 
     execute all operations
+
+    :copyright: (c) 2012 by David Wolever and contributors.
+    :license: BSD, see LICENSE for more details.
 '''
 
 

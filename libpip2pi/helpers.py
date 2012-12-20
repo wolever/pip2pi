@@ -5,7 +5,7 @@
 
     provides some helper functions
 
-    :copyright: (c) 2012 by David Wolever.
+    :copyright: (c) 2012 by David Wolever and contributors.
     :license: BSD, see LICENSE for more details.
 '''
 

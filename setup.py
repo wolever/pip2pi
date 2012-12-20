@@ -27,6 +27,7 @@ setup(
     """,
     long_description=long_description,
     packages=find_packages(),
+    install_requires=['pip'],
     scripts=["bin/pip2pi"],
     license="BSD",
     classifiers=[ x.strip() for x in """

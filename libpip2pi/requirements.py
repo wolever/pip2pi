@@ -5,6 +5,9 @@
 
     Implements class and helper to list required packages for your private
     PyPI repository.
+
+    :copyright: (c) 2012 by David Wolever and contributors.
+    :license: BSD, see LICENSE for more details.
 '''
 
 

@@ -5,7 +5,7 @@
 
     A simple class that implements a command line parser for pip2pi.
 
-    :copyright: (c) 2012 by David Wolever.
+    :copyright: (c) 2012 by David Wolever and contributors.
     :license: BSD, see LICENSE for more details.
 '''
 

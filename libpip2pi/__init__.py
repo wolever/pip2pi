@@ -6,7 +6,7 @@
     A library to build a PyPI-compatible package repository from pip
     requirements.
 
-    :copyright: (c) 2012 by David Wolever.
+    :copyright: (c) 2012 by David Wolever and contributors.
     :license: BSD, see LICENSE for more details.
 '''
 
