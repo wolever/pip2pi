@@ -21,16 +21,16 @@ def get_parser():
                                      'package repository from pip '
                                      'requirements.')
 
-    parser.add_argument('-o', '--output', nargs=1, metavar='<DIR>',
+    parser.add_argument('-o', '--output', metavar='<DIR>',
                         help='Create repository in <DIR> (default: current '
-                        'directory)')
+                        'directory)', default='.')
 
-    parser.add_argument('-b', '--build', nargs=1, metavar='<DIR>',
+    parser.add_argument('-b', '--build', metavar='<DIR>',
                         help='Temporary directory to build the repository.'
                         'This directory will be deleted at the end.'
-                        '(default: /tmp/pip2pi)')
+                        '(default: /tmp/pip2pi)', default='/tmp/pip2pi')
 
-    parser.add_argument('-r', '--requirements', nargs='*', metavar='<FILENAME>',
+    parser.add_argument('-r', '--requirements', metavar='<FILENAME>',
                         help='Mirror all the packages listed in the given'
                         'requirements file. This option can by used multiple'
                         'times.')
