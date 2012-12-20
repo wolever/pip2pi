@@ -38,12 +38,16 @@ def get_bundle(package, outdir='/tmp', tempdir='/tmp', bundle='bundle.zip',
     build_dir = os.path.join(tempdir, 'build')
     bundle_zip = os.path.join(outdir, bundle)
 
-    pip = Popen(['pip', 'bundle', '-q', '-b', build_dir, 
-                 '--no-deps' if not get_dependencies else '',
-                 bundle_zip, package])
+    command = ['pip', 'bundle', '-q', '-b', build_dir]
+    if not get_dependencies:
+        command += ['--no-deps']
+    command += [bundle_zip, package]
+
+    pip = Popen(command)
     pip.wait()
     if pip.returncode:
         shutil.rmtree(tempdir)
+        print '%s : not found' % package
         raise ValueError('%s package : not found' % package)
 
     #TODO: use a real logger
@@ -76,6 +80,7 @@ def bundle_to_tgz(bundle, tempdir='/tmp', outdir='/tmp'):
             continue
         pkg_version = line.split('==')
         if len(pkg_version) != 2:
+            print ('surprising line in %r: %r' % (bundle_file, line))
             raise ValueError('surprising line in %r: %r'
                              % (bundle_file, line))
         pkg, version = pkg_version
@@ -94,9 +99,11 @@ def bundle_to_tgz(bundle, tempdir='/tmp', outdir='/tmp'):
         package.add(new_input_dir, recursive=True,
                     arcname=os.path.relpath(new_input_dir, tempdir))
         package.close()
+        print ('%s : sucessfully added to your repository.' %
+            (os.path.relpath(new_input_dir, tempdir) + ".tar.gz"))
+
 
     shutil.rmtree(tempdir)
-
 
 def dir_to_pi(pkgdir):
     '''

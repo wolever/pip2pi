@@ -12,8 +12,8 @@
 
 
 from libpip2pi.parser import get_parser
-from libpip2pi.actions import get_bundle, bundle_to_tgz
-from libpip2pi.requirements import Requirements, parse_file
+from libpip2pi.actions import get_bundle, bundle_to_tgz, dir_to_pi
+from libpip2pi.requirements import Requirements
 import shutil
 import os
 
@@ -35,16 +35,22 @@ def main():
 
     requirements = Requirements()
     if args.requirements is not None:
-        parse_file(requirements, args.requirements)
+        requirements.parse_file(args.requirements)
+
+    for package in args.package:
+        requirements.add_package(package)
 
     for package, source in requirements:
         try:
+            print "processing %s" % package
             bundle_to_tgz(get_bundle(package, args.build, args.build,
                                      get_dependencies=args.dependencies),
                           args.build, args.output)
         except:
             if not args.ignore_missing:
                 return 0
-            pass
+
+    dir_to_pi(args.output)
     shutil.rmtree(args.build)
 
+    return 0
