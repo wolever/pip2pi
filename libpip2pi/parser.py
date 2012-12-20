@@ -20,6 +20,11 @@ def get_parser():
     parser = argparse.ArgumentParser(description='Build a PyPI-compatible '
                                      'package repository from pip '
                                      'requirements.')
+    parser.add_argument('-i', '--ignore-missing', help='Ignore missing '
+                        'packages.', action='store_true', default=False)
+
+    parser.add_argument('-d', '--dependencies', help='Let pip manage package '
+                        'dependencies.', action='store_true', default=False)
 
     parser.add_argument('-o', '--output', metavar='<DIR>',
                         help='Create repository in <DIR> (default: current '
