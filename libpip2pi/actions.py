@@ -18,7 +18,7 @@ from uuid import uuid4
 
 
 def get_bundle(package, outdir='/tmp', tempdir='/tmp', bundle='bundle.zip',
-               ignore_dependencies=True):
+               get_dependencies=False):
     '''
     downloads and creates a bundle for a given package.
 
@@ -38,7 +38,8 @@ def get_bundle(package, outdir='/tmp', tempdir='/tmp', bundle='bundle.zip',
     build_dir = os.path.join(tempdir, 'build')
     bundle_zip = os.path.join(outdir, bundle)
 
-    pip = Popen(['pip', 'bundle', '-q', '-b', build_dir, '--no-deps',
+    pip = Popen(['pip', 'bundle', '-q', '-b', build_dir, 
+                 '--no-deps' if not get_dependencies else '',
                  bundle_zip, package])
     pip.wait()
     if pip.returncode:
