@@ -35,9 +35,9 @@ class Requirements(object):
         '''
         self._dict[package] = None
         if source is not None and cache:
-            self._dict[package] = "--download-cache=%s" % source
+            self._dict[package] = '--download-cache=%s' % source
         elif source is not None:
-            self._dict[package] = "--index-url=%s" % source
+            self._dict[package] = '--index-url=%s' % source
 
     def __iter__(self):
         return self._dict.iteritems()

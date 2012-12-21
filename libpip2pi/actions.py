@@ -54,7 +54,7 @@ def get_bundle(package, outdir='/tmp', tempdir='/tmp', bundle='bundle.zip',
         raise ValueError('%s package : not found' % package)
 
     #TODO: use a real logger
-    print "%s has been sucessfully bundled" % package
+    print '%s has been sucessfully bundled' % package
 
     shutil.rmtree(tempdir)
 
@@ -97,13 +97,13 @@ def bundle_to_tgz(bundle, tempdir='/tmp', outdir='/tmp'):
 
         output_name = os.path.join(outdir,
                                    os.path.relpath(new_input_dir,
-                                                   tempdir) + ".tar.gz")
+                                                   tempdir) + '.tar.gz')
         package = tarfile.open(output_name, 'w:gz')
         package.add(new_input_dir, recursive=True,
                     arcname=os.path.relpath(new_input_dir, tempdir))
         package.close()
         print ('%s : sucessfully added to your repository.' %
-            (os.path.relpath(new_input_dir, tempdir) + ".tar.gz"))
+            (os.path.relpath(new_input_dir, tempdir) + '.tar.gz'))
 
 
     shutil.rmtree(tempdir)
@@ -118,22 +118,22 @@ def dir_to_pi(pkgdir):
 
     pkgdirpath = lambda *x: os.path.join(pkgdir, *x)
     if not os.path.isdir(pkgdir):
-        raise ValueError("no such directory: %r" % (pkgdir, ))
-    shutil.rmtree(pkgdirpath("simple"), ignore_errors=True)
-    os.mkdir(pkgdirpath("simple"))
+        raise ValueError('no such directory: %r' % (pkgdir, ))
+    shutil.rmtree(pkgdirpath('simple'), ignore_errors=True)
+    os.mkdir(pkgdirpath('simple'))
 
     for file in os.listdir(pkgdir):
         pkg_filepath = os.path.join(pkgdir, file)
         if not os.path.isfile(pkg_filepath):
             continue
         pkg_basename = os.path.basename(file)
-        if pkg_basename.startswith("."):
+        if pkg_basename.startswith('.'):
             continue
         pkg_name, pkg_rest = file_to_package(pkg_basename, pkgdir)
-        pkg_dir = pkgdirpath("simple", pkg_name)
+        pkg_dir = pkgdirpath('simple', pkg_name)
         if not os.path.exists(pkg_dir):
             os.mkdir(pkg_dir)
-        pkg_new_basename = "-".join([pkg_name, pkg_rest])
+        pkg_new_basename = '-'.join([pkg_name, pkg_rest])
         symlink_target = os.path.join(pkg_dir, pkg_new_basename)
-        symlink_source = os.path.join("../../", pkg_basename)
+        symlink_source = os.path.join('../../', pkg_basename)
         os.symlink(symlink_source, symlink_target)

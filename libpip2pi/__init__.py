@@ -42,11 +42,11 @@ def main():
 
     for package, source in requirements:
         try:
-            print "processing %s" % package
+            print 'processing %s' % package
             bundle_to_tgz(get_bundle(package, args.build, args.build,
                                      get_dependencies=args.dependencies),
                           args.build, args.output)
-        except:
+        except ValueError:
             if not args.ignore_missing:
                 return 0
 
