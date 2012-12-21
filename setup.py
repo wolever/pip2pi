@@ -22,12 +22,13 @@ setup(
     author="David Wolever",
     author_email="david@wolever.net",
     description="""
-        pip2pi builds a PyPI-compatible package repository from pip
-        requirements
+    pip2pi builds a PyPI-compatible package repository from pip
+    requirements
     """,
     long_description=long_description,
     packages=find_packages(),
-    scripts=["pip2pi", "pip2tgz", "dir2pi"],
+    install_requires=['pip'],
+    scripts=["bin/pip2pi"],
     license="BSD",
     classifiers=[ x.strip() for x in """
         Development Status :: 4 - Beta

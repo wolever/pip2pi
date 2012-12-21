@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+'''
+    pip2pi
+    ~~~~~~
+
+    A simple application to build a PyPI-compatible package repository from
+    pip requirements.
+
+    :copyright: (c) 2012 by David Wolever.
+    :license: BSD, see LICENSE for more details.
+'''
+
+
+from libpip2pi import main
+
+
+main()

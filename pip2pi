@@ -1,3 +1,0 @@
-#!/usr/bin/env python
-from libpip2pi.commands import pip2pi
-pip2pi()
