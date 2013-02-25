@@ -118,15 +118,15 @@ Now updating your package index will be as simple as::
 Using Your New Package Index
 ----------------------------
 
-To use the new package index, pass the ``--use-index=`` argument to ``pip``::
+To use the new package index, pass the ``--index-url=`` argument to ``pip``::
 
-    $ pip install --use-index=http://example.com/packages/simple/ foo
+    $ pip install --index-url=http://example.com/packages/simple/ foo
 
 Or, once it has been mirrored, prefix you ``requirements.txt`` with
-``--use-index=...``::
+``--index-url=...``::
 
     $ cat requirements.txt
-    --use-index=http://example.com/packages/simple/
+    --index-url=http://example.com/packages/simple/
     foo==1.2
 
 
