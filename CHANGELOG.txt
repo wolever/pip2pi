@@ -1,3 +1,9 @@
+0.2.1 (2013-06-08)
+
+    * dir2pi will now do sensible things when it encounters egg files
+      (https://github.com/wolever/pip2pi/pull/8; thanks @georgevreilly).
+    * Added the start of a test suite.
+
 0.2.0 (2013-05-30)
 
     * pip2pi now generates an index.html file in the package directory
