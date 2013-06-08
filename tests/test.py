@@ -7,11 +7,11 @@ import thread
 import tempfile
 import posixpath
 import unittest2
+import subprocess
 import SocketServer
 import SimpleHTTPServer
-from subprocess import check_call
 
-from libpip2pi.commands import pip2pi
+from libpip2pi import commands as pip2pi_commands
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -66,13 +66,21 @@ class Pip2PiTests(unittest2.TestCase):
     def setUp(self):
         os.chdir(BASE_PATH)
         self._temp_dir = None
+        print "\n" + "-" * 70
 
     def tearDown(self):
         if self._temp_dir is not None:
             shutil.rmtree(self._temp_dir)
 
     def assertDirsEqual(self, a, b):
-        check_call(["diff", "-x", "*.tar.gz", "-r", a, b])
+        res = subprocess.call(["diff", "-x", "*.tar.gz", "-r", a, b])
+        if res:
+            print "1st directory:", a
+            subprocess.call(["find", a])
+            print "2nd directory:", b
+            subprocess.call(["find", b])
+            raise AssertionError("Directories %r and %r differ! (see errors "
+                                 "printed to stdout)" %(a, b))
 
     @property
     def temp_dir(self):
@@ -84,18 +92,23 @@ class Pip2PiTests(unittest2.TestCase):
     def index_url(self):
         return "--index-url=http://127.0.0.1:%s/simple/" %(self.SERVER_PORT, )
 
-    def pip2pi(self, args):
-        print "Running pip2pi with:", args
-        return pip2pi(["pip2pi"] + args)
+    def exc(self, cmd, args):
+        print "Running %s with: %s" %(cmd, args)
+        return getattr(pip2pi_commands, cmd)([cmd] + args)
 
     def test_requirements_txt(self):
-        res = self.pip2pi([
+        res = self.exc("pip2pi", [
             self.temp_dir,
             self.index_url,
             "-r", "test_requirements_txt/requirements.txt",
         ])
         self.assertEqual(res, 0)
         self.assertDirsEqual("test_requirements_txt/expected/", self.temp_dir)
+
+    def test_eggs_in_packages(self):
+        shutil.copy("test_eggs_in_packages/fish-1.1-py2.7.egg", self.temp_dir)
+        self.exc("dir2pi", [self.temp_dir])
+        self.assertDirsEqual("test_eggs_in_packages/", self.temp_dir)
 
 if __name__ == "__main__":
     unittest2.main()
