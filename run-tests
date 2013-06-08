@@ -1,0 +1,8 @@
+#!/bin/bash
+
+IFS="`printf "\n\t"`"
+set -eu
+cd "`dirname "$0"`"
+
+cd tests/
+./test.py
