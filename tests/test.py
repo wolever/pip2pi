@@ -15,6 +15,50 @@ from libpip2pi import commands as pip2pi_commands
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 
+class chdir(object):
+    """ A drop-in replacement for ``os.chdir`` which also acts as a context
+        manager.
+
+        >>> old_cwd = os.getcwd()
+        >>> with chdir("/usr/"):
+        ...     print "current dir:", os.getcwd()
+        ...
+        current dir: /usr
+        >>> os.getcwd() == old_cwd
+        True
+        >>> x = chdir("/usr/")
+        >>> os.getcwd()
+        '/usr'
+        >>> x
+        chdir('/usr/', old_path='...')
+        >>> x.unchdir()
+        >>> os.getcwd() == old_cwd
+        True
+        """
+
+    def __init__(self, new_path, old_path=None):
+        self.old_path = old_path or os.getcwd()
+        self.new_path = new_path
+        self.chdir()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.unchdir()
+
+    def chdir(self):
+        os.chdir(self.new_path)
+
+    def unchdir(self):
+        os.chdir(self.old_path)
+
+    def __repr__(self):
+        return "%s(%r, old_path=%r)" %(
+            type(self).__name__, self.new_path, self.old_path,
+        )
+
+
 class Pip2PiRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     base_path = os.path.join(BASE_PATH, "assets/")
 
@@ -75,10 +119,12 @@ class Pip2PiTests(unittest2.TestCase):
     def assertDirsEqual(self, a, b):
         res = subprocess.call(["diff", "-x", "*.tar.gz", "-r", a, b])
         if res:
-            print "1st directory:", a
-            subprocess.call(["find", a])
-            print "2nd directory:", b
-            subprocess.call(["find", b])
+            with chdir(a):
+                print "1st directory:", a
+                subprocess.call(["find", "."])
+            with chdir(b):
+                print "2nd directory:", b
+                subprocess.call(["find", "."])
             raise AssertionError("Directories %r and %r differ! (see errors "
                                  "printed to stdout)" %(a, b))
 
