@@ -137,6 +137,29 @@ You can use your package index offline, too::
 
     $ pip install --index-url=file:///var/www/packages/simple foo==1.2
 
+ 
+
+Some Tips
+--------------------
+
+When installing packages from source via ``python setup.py install``
+or ``python setup.py install``, you may need to create a
+``setup.cfg``, which points to your package index.
+Here are some examples for an offline package index
+in your Windows, Linux, or Mac file system::
+    
+    [easy_install]
+    # Windows
+    # index_url = file:///C:/pip2pi/simple/
+
+    # Linux
+    # index_url = file:///home/myusername/.pip2pi/simple/
+
+    # Mac
+    index_url = file:///Users/myusername/.pip2pi/simple/
+    
+Note the triple ``///` after ``file:`` -- two for the protocol,
+the third for the root of the local file system.
 
 
 Keywords
