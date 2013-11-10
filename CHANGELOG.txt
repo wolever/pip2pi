@@ -1,3 +1,8 @@
+0.3.0 (2013-11-10)
+
+    * Added Windows support, use setup.py ``console_scripts``
+      (https://github.com/wolever/pip2pi/pull/17; thanks @georgevreilly).
+
 0.2.1 (2013-06-08)
 
     * dir2pi will now do sensible things when it encounters egg files
