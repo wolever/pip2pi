@@ -137,10 +137,9 @@ You can use your package index offline, too::
 
     $ pip install --index-url=file:///var/www/packages/simple foo==1.2
 
- 
 
 Some Tips
---------------------
+---------
 
 When installing packages from source via ``python setup.py install``
 or ``python setup.py install``, you may need to create a
