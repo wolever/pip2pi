@@ -1,19 +1,32 @@
 #!/usr/bin/env python
 import os
-import urllib
+import sys
+try:
+    from urllib import unquote
+except ImportError: # python3
+    from urllib.parse import unquote
 import random
 import shutil
-import thread
+import threading
 import tempfile
 import posixpath
 import unittest2
 import subprocess
-import SocketServer
-import SimpleHTTPServer
+try:
+    from SocketServer import ThreadingMixIn
+    from BaseHTTPServer import HTTPServer
+    from SimpleHTTPServer import SimpleHTTPRequestHandler
+except ImportError: # python 3
+    from socketserver import ThreadingMixIn
+    from http.server import HTTPServer
+    from http.server import SimpleHTTPRequestHandler
 
-from libpip2pi import commands as pip2pi_commands
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
+PKG_BASE_PATH = os.path.abspath(os.path.dirname(__file__)+"/../")
+sys.path.append(PKG_BASE_PATH)
+
+from libpip2pi import commands as pip2pi_commands
 
 class chdir(object):
     """ A drop-in replacement for ``os.chdir`` which also acts as a context
@@ -59,7 +72,7 @@ class chdir(object):
         )
 
 
-class Pip2PiRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class Pip2PiRequestHandler(SimpleHTTPRequestHandler):
     base_path = os.path.join(BASE_PATH, "assets/")
 
     def translate_path(self, path):
@@ -73,7 +86,7 @@ class Pip2PiRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         # abandon query parameters
         path = path.split('?',1)[0]
         path = path.split('#',1)[0]
-        path = posixpath.normpath(urllib.unquote(path))
+        path = posixpath.normpath(unquote(path))
         words = path.split('/')
         words = filter(None, words)
         path = self.base_path
@@ -87,30 +100,30 @@ class Pip2PiRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 class Pip2PiTests(unittest2.TestCase):
     SERVER_PORT = random.randint(10000, 40000)
-
+    class BackgroundIt(threading.Thread):
+        server = None
+        def run(self):
+            self.server.serve_forever()
+            
+    class ThreadingServer(ThreadingMixIn, HTTPServer):
+        pass
+            
     @classmethod
     def setUpClass(cls):
-        server_ready = thread.allocate_lock()
-        server_ready.acquire()
-        cls._server_thread = thread.start_new_thread(cls.spawn_http_server,
-                                                     (server_ready, ))
-        server_ready.acquire()
-
+        cls._server_thread = cls.BackgroundIt()
+        cls.server = cls.ThreadingServer(("127.0.0.1", cls.SERVER_PORT),
+                                         Pip2PiRequestHandler)
+        cls._server_thread.server = cls.server
+        cls._server_thread.start()
+        
     @classmethod
     def tearDownClass(cls):
         cls.server.shutdown()
 
-    @classmethod
-    def spawn_http_server(cls, ready_lock):
-        cls.server = SocketServer.TCPServer(("127.0.0.1", cls.SERVER_PORT),
-                                            Pip2PiRequestHandler)
-        ready_lock.release()
-        cls.server.serve_forever()
-
     def setUp(self):
         os.chdir(BASE_PATH)
         self._temp_dir = None
-        print "\n" + "-" * 70
+        print( "\n" + "-" * 70 )
 
     def tearDown(self):
         if self._temp_dir is not None:
@@ -120,10 +133,10 @@ class Pip2PiTests(unittest2.TestCase):
         res = subprocess.call(["diff", "-x", "*.tar.gz", "-r", a, b])
         if res:
             with chdir(a):
-                print "1st directory:", a
+                print( "1st directory:", a )
                 subprocess.call(["find", "."])
             with chdir(b):
-                print "2nd directory:", b
+                print( "2nd directory:", b )
                 subprocess.call(["find", "."])
             raise AssertionError("Directories %r and %r differ! (see errors "
                                  "printed to stdout)" %(a, b))
@@ -139,7 +152,7 @@ class Pip2PiTests(unittest2.TestCase):
         return "--index-url=http://127.0.0.1:%s/simple/" %(self.SERVER_PORT, )
 
     def exc(self, cmd, args):
-        print "Running %s with: %s" %(cmd, args)
+        print( "Running %s with: %s" %(cmd, args) )
         return getattr(pip2pi_commands, cmd)([cmd] + args)
 
     def test_requirements_txt(self):
