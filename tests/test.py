@@ -5,13 +5,15 @@ try:
     from urllib import unquote
 except ImportError: # python3
     from urllib.parse import unquote
+
 import random
 import shutil
-import threading
 import tempfile
+import unittest
+import threading
 import posixpath
-import unittest2
 import subprocess
+
 try:
     from SocketServer import ThreadingMixIn
     from BaseHTTPServer import HTTPServer
@@ -23,7 +25,7 @@ except ImportError: # python 3
 
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
-PKG_BASE_PATH = os.path.abspath(os.path.dirname(__file__)+"/../")
+PKG_BASE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "../")
 sys.path.append(PKG_BASE_PATH)
 
 from libpip2pi import commands as pip2pi_commands
@@ -98,8 +100,9 @@ class Pip2PiRequestHandler(SimpleHTTPRequestHandler):
         return path
 
 
-class Pip2PiTests(unittest2.TestCase):
+class Pip2PiTests(unittest.TestCase):
     SERVER_PORT = random.randint(10000, 40000)
+
     class BackgroundIt(threading.Thread):
         server = None
         def run(self):
@@ -170,4 +173,4 @@ class Pip2PiTests(unittest2.TestCase):
         self.assertDirsEqual("test_eggs_in_packages/", self.temp_dir)
 
 if __name__ == "__main__":
-    unittest2.main()
+    unittest.main()
