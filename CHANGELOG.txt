@@ -1,3 +1,8 @@
+0.4.0 (2013-11-23)
+    
+    * Added preliminary Python 3 support
+      (https://github.com/wolever/pip2pi/pull/18; thanks @wogg).
+
 0.3.0 (2013-11-10)
 
     * Added Windows support, use setup.py ``console_scripts``
