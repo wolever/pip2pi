@@ -34,7 +34,7 @@ class chdir(object):
 
         >>> old_cwd = os.getcwd()
         >>> with chdir("/usr/"):
-        ...     print "current dir:", os.getcwd()
+        ...     print("current dir:", os.getcwd())
         ...
         current dir: /usr
         >>> os.getcwd() == old_cwd
@@ -123,7 +123,7 @@ class Pip2PiTests(unittest2.TestCase):
     def setUp(self):
         os.chdir(BASE_PATH)
         self._temp_dir = None
-        print( "\n" + "-" * 70 )
+        print("\n" + "-" * 70)
 
     def tearDown(self):
         if self._temp_dir is not None:
@@ -133,10 +133,10 @@ class Pip2PiTests(unittest2.TestCase):
         res = subprocess.call(["diff", "-x", "*.tar.gz", "-r", a, b])
         if res:
             with chdir(a):
-                print( "1st directory:", a )
+                print("1st directory:", a)
                 subprocess.call(["find", "."])
             with chdir(b):
-                print( "2nd directory:", b )
+                print("2nd directory:", b)
                 subprocess.call(["find", "."])
             raise AssertionError("Directories %r and %r differ! (see errors "
                                  "printed to stdout)" %(a, b))
@@ -152,7 +152,7 @@ class Pip2PiTests(unittest2.TestCase):
         return "--index-url=http://127.0.0.1:%s/simple/" %(self.SERVER_PORT, )
 
     def exc(self, cmd, args):
-        print( "Running %s with: %s" %(cmd, args) )
+        print("Running %s with: %s" %(cmd, args))
         return getattr(pip2pi_commands, cmd)([cmd] + args)
 
     def test_requirements_txt(self):
