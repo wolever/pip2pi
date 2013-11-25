@@ -9,6 +9,7 @@ import textwrap
 import functools
 from subprocess import check_call
 import pkg_resources
+import glob
 
 def dedent(text):
     return textwrap.dedent(text.lstrip("\n"))
@@ -144,45 +145,11 @@ def pip2tgz(argv=sys.argv):
     outdir = os.path.abspath(argv[1])
     if not os.path.exists(outdir):
         os.mkdir(outdir)
-
-    tempdir = os.path.join(outdir, "_pip2tgz_temp")
-    if os.path.exists(tempdir):
-        shutil.rmtree(tempdir)
-    os.mkdir(tempdir)
-
-    bundle_zip = os.path.join(tempdir, "bundle.zip")
-    build_dir = os.path.join(tempdir, "build")
-    check_call(["pip", "bundle", "-b", build_dir, bundle_zip] + argv[2:])
-
-    os.chdir(tempdir)
-    if os.path.exists(build_dir):
-        zipfile.ZipFile("bundle.zip").extract("pip-manifest.txt")
-    else:
-        # Older versions of pip delete the "build" directory after they
-        # are done with it... So extract the entire bundle.zip
-        zipfile.ZipFile("bundle.zip").extractall()
-
-    num_pakages = 0
-    for line in open("pip-manifest.txt"):
-        line = line.strip()
-        if not line or line.startswith("#"):
-            continue
-        pkg_version = line.split("==")
-        if len(pkg_version) != 2:
-            bundle_file = os.path.abspath("pip-manifest.txt")
-            raise ValueError("surprising line in %r: %r"
-                             %(bundle_file, line, ))
-        pkg, version = pkg_version
-        version = version.replace("-", "_")
-        old_input_dir = os.path.join("build/", pkg)
-        new_input_dir = "%s-%s" %(pkg, version)
-        os.rename(old_input_dir, new_input_dir)
-        output_name = os.path.join("..", new_input_dir + ".tar.gz")
-        check_call(["tar", "-czf", output_name, new_input_dir])
-        num_pakages += 1
-
+    
+    check_call(["pip", "install", "-d", outdir] + argv[2:])
     os.chdir(outdir)
-    shutil.rmtree(tempdir)
+    num_pakages = len(glob.glob('./*.tar.gz'))
+
     print("%s .tar.gz saved to %r" %(num_pakages, argv[1]))
     return 0
 
