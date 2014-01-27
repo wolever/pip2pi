@@ -1,6 +1,9 @@
 ``pip2pi`` builds a PyPI-compatible package repository from ``pip`` requirements
 ================================================================================
 
+.. image:: https://travis-ci.org/wolever/pip2pi.png?branch=master
+    :target: https://travis-ci.org/wolever/pip2pi
+
 PyPI can go down, package maintainers can remove old tarballs, and downloading
 tarballs can take a long time. ``pip2pi`` helps to alleviate these problems by
 making it blindingly simple to maintain a PyPI-compatible repository of packages
