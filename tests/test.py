@@ -107,10 +107,10 @@ class Pip2PiTests(unittest.TestCase):
         server = None
         def run(self):
             self.server.serve_forever()
-            
+
     class ThreadingServer(ThreadingMixIn, HTTPServer):
         pass
-            
+
     @classmethod
     def setUpClass(cls):
         cls._server_thread = cls.BackgroundIt()
@@ -118,7 +118,7 @@ class Pip2PiTests(unittest.TestCase):
                                          Pip2PiRequestHandler)
         cls._server_thread.server = cls.server
         cls._server_thread.start()
-        
+
     @classmethod
     def tearDownClass(cls):
         cls.server.shutdown()
@@ -133,7 +133,7 @@ class Pip2PiTests(unittest.TestCase):
             shutil.rmtree(self._temp_dir)
 
     def assertDirsEqual(self, a, b):
-        res = subprocess.call(["diff", "-x", "*.tar.gz", "-r", a, b])
+        res = subprocess.call(["diff", "-x", "*", "-r", a, b])
         if res:
             with chdir(a):
                 print("1st directory:", a)
@@ -171,6 +171,15 @@ class Pip2PiTests(unittest.TestCase):
         shutil.copy("test_eggs_in_packages/fish-1.1-py2.7.egg", self.temp_dir)
         self.exc("dir2pi", [self.temp_dir])
         self.assertDirsEqual("test_eggs_in_packages/", self.temp_dir)
+
+    def test_wheels(self):
+        res = self.exc("pip2whl", [
+            self.temp_dir,
+            self.index_url,
+            "-r", "test_wheels/requirements.txt",
+        ])
+        self.assertEqual(res, 0)
+        self.assertDirsEqual('test_wheels/expected/', self.temp_dir)
 
 if __name__ == "__main__":
     unittest.main()
