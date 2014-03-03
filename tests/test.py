@@ -8,6 +8,7 @@ except ImportError: # python3
 
 import random
 import shutil
+import doctest
 import tempfile
 import unittest
 import threading
@@ -100,7 +101,7 @@ class Pip2PiRequestHandler(SimpleHTTPRequestHandler):
         return path
 
 
-class Pip2PiTests(unittest.TestCase):
+class Pip2PiHeavyTests(unittest.TestCase):
     SERVER_PORT = random.randint(10000, 40000)
 
     class BackgroundIt(threading.Thread):
@@ -180,6 +181,12 @@ class Pip2PiTests(unittest.TestCase):
         ])
         self.assertEqual(res, 0)
         self.assertDirsEqual('test_wheels/expected/', self.temp_dir)
+
+
+def load_tests(loader, tests, ignore):
+    tests.addTests(doctest.DocTestSuite(pip2pi_commands))
+    return tests
+
 
 if __name__ == "__main__":
     unittest.main()
