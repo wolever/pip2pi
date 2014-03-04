@@ -1,3 +1,7 @@
+0.6.2 (2014-03-04)
+    * Add pip version sniffing to detect when we need to download wheels
+      versus when pip will do it correctly.
+
 0.6.1 (2014-03-03)
     * Remove pip2whl command
     * Fixed wheel support so dependencies are correctly downloaded
