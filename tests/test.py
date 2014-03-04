@@ -174,7 +174,7 @@ class Pip2PiHeavyTests(unittest.TestCase):
         self.assertDirsEqual("test_eggs_in_packages/", self.temp_dir)
 
     def test_wheels(self):
-        res = self.exc("pip2whl", [
+        res = self.exc("pip2tgz", [
             self.temp_dir,
             self.index_url,
             "-r", "test_wheels/requirements.txt",
