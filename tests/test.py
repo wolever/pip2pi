@@ -101,6 +101,16 @@ class Pip2PiRequestHandler(SimpleHTTPRequestHandler):
         return path
 
 
+def walkdir(d):
+    result = []
+    d += "/"
+    for root, dirs, files in os.walk(d):
+        root = root[len(d):]
+        result.extend(os.path.join(root, d) + "/" for d in dirs)
+        result.extend(os.path.join(root, f) for f in files)
+    result.sort()
+    return result
+
 class Pip2PiHeavyTests(unittest.TestCase):
     SERVER_PORT = random.randint(10000, 40000)
 
@@ -134,14 +144,13 @@ class Pip2PiHeavyTests(unittest.TestCase):
             shutil.rmtree(self._temp_dir)
 
     def assertDirsEqual(self, a, b):
-        res = subprocess.call(["diff", "-x", "*", "-r", a, b])
-        if res:
-            with chdir(a):
-                print("1st directory:", a)
-                subprocess.call(["find", "."])
-            with chdir(b):
-                print("2nd directory:", b)
-                subprocess.call(["find", "."])
+        a_files = walkdir(a)
+        b_files = walkdir(b)
+        if a_files != b_files:
+            print("1st directory: %s" %(a, ))
+            print("\n".join(a_files))
+            print("2nd directory: %s" %(b, ))
+            print("\n".join(b_files))
             raise AssertionError("Directories %r and %r differ! (see errors "
                                  "printed to stdout)" %(a, b))
 

@@ -1,1 +1,2 @@
 fish
+example.with-dashes-and.dots

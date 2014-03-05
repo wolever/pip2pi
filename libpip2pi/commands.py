@@ -11,13 +11,14 @@ import pkg_resources
 import glob
 
 try:
-    import wheel as _; _
+    import wheel as _; _ # keep pyflakes happy
     has_wheel = True
 except ImportError:
     has_wheel = False
 
 try:
-    import pip
+    import pip as _pip # keep pyflakes happy
+    pip = _pip
 except ImportError:
     pip = None
 
