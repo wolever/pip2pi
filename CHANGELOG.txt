@@ -1,3 +1,11 @@
+0.6.4 (2014-08-03)
+    * Fix parsing of package file names which include a dash in version number
+      (https://github.com/wolever/pip2pi/pull/29; thanks @cl3m0)
+
+0.6.3 (2014-08-03)
+    * Add --no-symlink option
+      (https://github.com/wolever/pip2pi/pull/28; thanks @georgevreilly)
+
 0.6.2 (2014-03-04)
     * Add pip version sniffing to detect when we need to download wheels
       versus when pip will do it correctly.
