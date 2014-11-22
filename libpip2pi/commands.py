@@ -227,7 +227,7 @@ def dir2pi(argv=sys.argv, use_symlink=OS_HAS_SYMLINK):
         if pkg_basename.startswith("."):
             continue
         pkg_name, pkg_rest = file_to_package(pkg_basename, pkgdir)
-        pkg_dir = pkgdirpath("simple", pkg_name)
+        pkg_dir = pkgdirpath("simple", pkg_name.lower())
         if not os.path.exists(pkg_dir):
             os.mkdir(pkg_dir)
         pkg_new_basename = "-".join([pkg_name, pkg_rest])
@@ -238,7 +238,7 @@ def dir2pi(argv=sys.argv, use_symlink=OS_HAS_SYMLINK):
         else:
             shutil.copy2(pkg_filepath, symlink_target)
         pkg_name_html = cgi.escape(pkg_name)
-        pkg_index += "<a href='{0}/'>{0}</a><br />\n".format(pkg_name_html)
+        pkg_index += "<a href='{}/'>{}</a><br />\n".format(pkg_name_html.lower(), pkg_name_html)
         with open(os.path.join(pkg_dir, "index.html"), "a") as fp:
             pkg_new_basename_html = cgi.escape(pkg_new_basename)
             fp.write("<a href='%s'>%s</a><br />\n"
