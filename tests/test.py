@@ -184,7 +184,10 @@ class Pip2PiHeavyTests(unittest.TestCase):
 
 
 def load_tests(loader, tests, ignore):
-    tests.addTests(doctest.DocTestSuite(pip2pi_commands, optionflags=doctest.ELLIPSIS))
+    tests.addTests(doctest.DocTestSuite(
+        pip2pi_commands,
+        optionflags=doctest.ELLIPSIS|doctest.IGNORE_EXCEPTION_DETAIL
+    ))
     return tests
 
 
