@@ -9,15 +9,36 @@ tarballs can take a long time. ``pip2pi`` helps to alleviate these problems by
 making it blindingly simple to maintain a PyPI-compatible repository of packages
 your software depends on.
 
+::
 
-Status
-------
+    $ pip2pi --help
+    Usage: pip2pi TARGET [PIP_OPTIONS] PACKAGES ...
 
-These tools were developed to be used internally, and they appear to work for
-me. A quick glance at the code will make it obvious that they are far from
-robust (ex, they probably won't work on Windows and they make a few calls to
-shell commands that could be implemented in Python)... But they should work,
-and they shouldn't eat your data or steal private keys or anything.
+    Adds packages PACKAGES to PyPI-compatible package index at TARGET.
+
+    If TARGET contains ':' it will be treated as a remote path. The
+    package index will be built locally and rsync will be used to copy
+    it to the remote host.
+
+    PIP_OPTIONS can be any options accepted by `pip install -d`, like
+    `--index-url` or `--no-use-wheel`.
+
+    For example, to create a remote index:
+
+        $ pip2pi example.com:/var/www/packages/ -r requirements.txt
+
+    To create a local index:
+
+        $ pip2pi ~/Sites/packages/ foo==1.2
+
+    To pass arguments to pip:
+
+        $ pip2pi ~/Sites/packages/ \
+            --index-url https://example.com/simple \
+            --no-use-wheel \
+            -r requirements-base.txt \
+            -r requirements-dev.txt \
+            bar==3.1
 
 
 Requirements
@@ -144,11 +165,10 @@ You can use your package index offline, too::
 Some Tips
 ---------
 
-When installing packages from source via ``python setup.py install``
-or ``python setup.py install``, you may need to create a
-``setup.cfg``, which points to your package index.
-Here are some examples for an offline package index
-in your Windows, Linux, or Mac file system::
+When installing packages from source via ``python setup.py install`` or
+``python setup.py install``, you may need to create a ``setup.cfg``, which
+points to your package index.  Here are some examples for an offline package
+index in your Windows, Linux, or Mac file system::
     
     [easy_install]
     # Windows
@@ -160,7 +180,7 @@ in your Windows, Linux, or Mac file system::
     # Mac
     index_url = file:///Users/myusername/.pip2pi/simple/
     
-Note the triple ``///` after ``file:`` -- two for the protocol,
+Note the triple ``///`` after ``file:`` -- two for the protocol,
 the third for the root of the local file system.
 
 

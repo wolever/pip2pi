@@ -1,3 +1,8 @@
+0.6.5 (2015-01-09)
+    * Update documentation to explicitly mention support for pip options
+    * Document ``file_to_package`` error handling, more explicit error when
+      building an index from a directory with non-package files.
+
 0.6.4 (2014-08-03)
     * Fix parsing of package file names which include a dash in version number
       (https://github.com/wolever/pip2pi/pull/29; thanks @cl3m0)
