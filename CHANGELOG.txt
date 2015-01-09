@@ -1,5 +1,10 @@
 0.6.5 (2015-01-09)
-    * Update documentation to explicitly mention support for pip options
+    * Add --normalize-package-names option
+    * Add deprecation warning when non-normalized package names are
+      encountered. See also: https://github.com/wolever/pip2pi/issues/37
+    * Deprecate undocumented ``libpip2pi.commands:egg_to_package`` function.
+    * Deprecate ``dir2pi(use_symlink=...)`` option.
+    * Update documentation to explicitly mention support for pip options.
     * Document ``file_to_package`` error handling, more explicit error when
       building an index from a directory with non-package files.
 
