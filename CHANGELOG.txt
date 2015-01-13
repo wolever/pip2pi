@@ -1,3 +1,7 @@
+0.6.6 (2015-01-13)
+    * Fix "no such file or directory" when pip2pi target is remote (thanks
+      @funkaoshi)
+
 0.6.5 (2015-01-09)
     * Add --normalize-package-names option
     * Add deprecation warning when non-normalized package names are
@@ -29,27 +33,22 @@
       (https://github.com/wolever/pip2pi/pull/24; thanks @tgross)
 
 0.5.0 (2013-12-04)
-    
     * Add install_requires on pip>=1.1
 
 0.4.0 (2013-11-23)
-    
     * Added preliminary Python 3 support
       (https://github.com/wolever/pip2pi/pull/18; thanks @wogg).
 
 0.3.0 (2013-11-10)
-
     * Added Windows support, use setup.py ``console_scripts``
       (https://github.com/wolever/pip2pi/pull/17; thanks @georgevreilly).
 
 0.2.1 (2013-06-08)
-
     * dir2pi will now do sensible things when it encounters egg files
       (https://github.com/wolever/pip2pi/pull/8; thanks @georgevreilly).
     * Added the start of a test suite.
 
 0.2.0 (2013-05-30)
-
     * pip2pi now generates an index.html file in the package directory
       (https://github.com/wolever/pip2pi/pull/7; thanks @venkatraju).
     * Added explicit simplified BSD license.
