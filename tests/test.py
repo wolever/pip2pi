@@ -183,6 +183,30 @@ class Pip2PiHeavyTests(unittest.TestCase):
         self.assertDirsEqual('test_wheels/expected/', self.temp_dir)
 
 
+class TestIsRemoteTarget(unittest.TestCase):
+    remote_targets = [
+        "a:b",
+        "a:/bar",
+        "foo:bar",
+    ]
+
+    local_targets = [
+        "foo",
+        "c:\\foo\\bar",
+        "z:\\things",
+    ]
+
+    def test_remote_target(self):
+        for target in self.remote_targets:
+            assert pip2pi_commands.is_remote_target(target), \
+                    "%r is remote" %(target, )
+
+    def test_local_target(self):
+        for target in self.local_targets:
+            assert not pip2pi_commands.is_remote_target(target), \
+                    "%r is local" %(target, )
+
+
 def load_tests(loader, tests, ignore):
     tests.addTests(doctest.DocTestSuite(
         pip2pi_commands,

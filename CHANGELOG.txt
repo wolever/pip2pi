@@ -1,3 +1,8 @@
+0.6.7 (2015-02-14)
+    * Special case Windows paths so that targets matching /^[A-Z]:\\/ are not
+      considered remote (https://github.com/wolever/pip2pi/issues/39; thanks
+      @dalito).
+
 0.6.6 (2015-01-13)
     * Fix "no such file or directory" when pip2pi target is remote (thanks
       @funkaoshi)
