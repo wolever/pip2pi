@@ -1,3 +1,9 @@
+0.6.8 (2015-05-27)
+    * Add ``--no-build-html`` and ``--also-get-source`` options
+      (https://github.com/wolever/pip2pi/pull/43; thanks @antevens)
+    * Normalize dashes in wheel package names
+      (https://github.com/wolever/pip2pi/pull/44; thanks @rouge8)
+
 0.6.7 (2015-02-14)
     * Special case Windows paths so that targets matching /^[A-Z]:\\/ are not
       considered remote (https://github.com/wolever/pip2pi/issues/39; thanks
