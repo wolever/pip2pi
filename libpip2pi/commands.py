@@ -227,7 +227,6 @@ class Pip2PiOptionParser(optparse.OptionParser):
             except (optparse.BadOptionError, optparse.AmbiguousOptionError) as e:
                 largs.append(e.opt_str)
 
-
 def dir2pi(argv=sys.argv, use_symlink=None):
     parser = Pip2PiOptionParser(
         usage="usage: %prog PACKAGE_DIR",
@@ -290,9 +289,11 @@ def _dir2pi(option, argv):
         pkg_name, pkg_rest = file_to_package(pkg_basename, pkgdir)
 
         pkg_dir_name = pkg_name
+        normalized_pkg_dir_name = re.sub(r"[-_.]+", "-", pkg_dir_name).lower()
+
         if option.normalize_package_names:
-            pkg_dir_name = pkg_dir_name.lower()
-        elif pkg_dir_name != pkg_dir_name.lower():
+            pkg_dir_name = normalized_pkg_dir_name
+        elif pkg_dir_name != normalized_pkg_dir_name:
             if option.normalize_package_names is None:
                 warn_normalized_pkg_names.append(pkg_name)
         pkg_dir = pkgdirpath("simple", pkg_dir_name)
