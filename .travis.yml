@@ -5,6 +5,6 @@ env:
   - TOX_ENV=py27
   - TOX_ENV=pypy
 install:
-  - pip install --use-mirrors tox==1.6.1
+  - pip install tox==1.6.1
 script:
   - tox -e $TOX_ENV
