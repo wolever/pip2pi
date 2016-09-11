@@ -115,7 +115,7 @@ def file_to_package(file, basedir=None):
     elif file_ext == ".whl":
         bits = file.rsplit("-", 4)
         split = (bits[0], "-".join(bits[1:]))
-        to_safe_name = pkg_resources.safe_name
+        to_safe_name = lambda x: x
         to_safe_rest = lambda x: x
     else:
         match = re.search(r"(?P<pkg>.*?)-(?P<rest>\d+.*)", file)
@@ -291,7 +291,7 @@ def _dir2pi(option, argv):
 
         pkg_dir_name = pkg_name
         if option.normalize_package_names:
-            pkg_dir_name = pkg_dir_name.lower()
+            pkg_dir_name = pkg_dir_name.lower().replace('_','-')
         elif pkg_dir_name != pkg_dir_name.lower():
             if option.normalize_package_names is None:
                 warn_normalized_pkg_names.append(pkg_name)
