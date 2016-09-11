@@ -94,7 +94,7 @@ def file_to_package(file, basedir=None):
         >>> file_to_package("python_ldap-2.3.9-py2.7-macosx-10.3-fat.egg")
         ('python-ldap', '2.3.9-py2.7-macosx-10.3-fat.egg')
         >>> file_to_package("python_ldap-2.4.19-cp27-none-macosx_10_10_x86_64.whl")
-        ('python-ldap', '2.4.19-cp27-none-macosx_10_10_x86_64.whl')
+        ('python_ldap', '2.4.19-cp27-none-macosx_10_10_x86_64.whl')
         >>> file_to_package("foo.whl")
         Traceback (most recent call last):
             ...
