@@ -291,7 +291,7 @@ def _dir2pi(option, argv):
 
         pkg_dir_name = pkg_name
         if option.normalize_package_names:
-            pkg_dir_name = pkg_dir_name.lower()
+            pkg_dir_name = pkg_dir_name.lower().replace(".", "-")
         elif pkg_dir_name != pkg_dir_name.lower():
             if option.normalize_package_names is None:
                 warn_normalized_pkg_names.append(pkg_name)
