@@ -94,7 +94,7 @@ def file_to_package(file, basedir=None):
         >>> file_to_package("python_ldap-2.3.9-py2.7-macosx-10.3-fat.egg")
         ('python-ldap', '2.3.9-py2.7-macosx-10.3-fat.egg')
         >>> file_to_package("python_ldap-2.4.19-cp27-none-macosx_10_10_x86_64.whl")
-        ('python-ldap', '2.4.19-cp27-none-macosx_10_10_x86_64.whl')
+        ('python_ldap', '2.4.19-cp27-none-macosx_10_10_x86_64.whl')
         >>> file_to_package("foo.whl")
         Traceback (most recent call last):
             ...
@@ -115,7 +115,7 @@ def file_to_package(file, basedir=None):
     elif file_ext == ".whl":
         bits = file.rsplit("-", 4)
         split = (bits[0], "-".join(bits[1:]))
-        to_safe_name = pkg_resources.safe_name
+        to_safe_name = lambda x: x
         to_safe_rest = lambda x: x
     else:
         match = re.search(r"(?P<pkg>.*?)-(?P<rest>\d+.*)", file)
@@ -291,7 +291,7 @@ def _dir2pi(option, argv):
 
         pkg_dir_name = pkg_name
         if option.normalize_package_names:
-            pkg_dir_name = pkg_dir_name.lower()
+            pkg_dir_name = pkg_dir_name.lower().replace('_', '-').replace('.', '-')
         elif pkg_dir_name != pkg_dir_name.lower():
             if option.normalize_package_names is None:
                 warn_normalized_pkg_names.append(pkg_name)
