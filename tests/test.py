@@ -150,7 +150,7 @@ class Pip2PiHeavyTests(unittest.TestCase):
 
         with chdir(dir):
             actual = [
-                describe(x[2:]) for x in
+                describe(x[2:].decode("utf-8")) for x in
                 sp.check_output(["find", "."]).splitlines()
                 if x[2:]
             ]
