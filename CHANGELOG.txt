@@ -1,3 +1,9 @@
+0.7.0 (TBD)
+    * Correctly normalize package names according to PEP-503 (thanks to
+      @aiman-alsari, @jstelzer, and many others).
+    * Add --aggressive-normalization option which will create a few different
+      normalizations to support older versions of pip.
+
 0.6.8 (2015-05-27)
     * Add ``--no-build-html`` and ``--also-get-source`` options
       (https://github.com/wolever/pip2pi/pull/43; thanks @antevens)

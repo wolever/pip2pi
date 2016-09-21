@@ -1,6 +1,7 @@
 fish-1.1.tar.gz
 Normalization_Test.with-dashes-1.2rc3.zip
 simple
+!case-sensitive: simple/Normalization-Test.with-dashes -> normalization-test-with-dashes
 simple/fish
 simple/fish/fish-1.1.tar.gz -> ../../fish-1.1.tar.gz
 simple/fish/index.html

@@ -102,6 +102,9 @@ class Pip2PiRequestHandler(SimpleHTTPRequestHandler):
         return path
 
 
+IS_CASE_INSENSITIVE = os.path.exists(__file__.upper())
+OS_HAS_SYMLINK = hasattr(os, "symlink")
+
 class Pip2PiHeavyTests(unittest.TestCase):
     SERVER_PORT = random.randint(10000, 40000)
 
@@ -136,9 +139,22 @@ class Pip2PiHeavyTests(unittest.TestCase):
 
     def assertDirContents(self, expected_contents, dir):
         with open(expected_contents) as f:
-            expected = f.read().splitlines()
+            expected = []
+            for line in f.read().splitlines():
+                if line.startswith("!"):
+                    prefix, _, line = line.partition(": ")
+                    if prefix == "!case-sensitive":
+                        if IS_CASE_INSENSITIVE:
+                            continue
+                    else:
+                        raise AssertionError("Unexpected prefix: %s" %(prefix, ))
+                if not OS_HAS_SYMLINK:
+                    line, _, _ = line.partition(" -> ")
+                expected.append(line)
 
         def describe(f):
+            if not OS_HAS_SYMLINK:
+                return f
             try:
                 link = os.readlink(f)
             except OSError as e:
