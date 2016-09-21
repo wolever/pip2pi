@@ -8,12 +8,13 @@ except ImportError: # python3
 
 import random
 import shutil
+import difflib
 import doctest
 import tempfile
 import unittest
 import threading
 import posixpath
-import subprocess
+import subprocess as sp
 
 try:
     from SocketServer import ThreadingMixIn
@@ -87,8 +88,8 @@ class Pip2PiRequestHandler(SimpleHTTPRequestHandler):
 
         """
         # abandon query parameters
-        path = path.split('?',1)[0]
-        path = path.split('#',1)[0]
+        path = path.split('?', 1)[0]
+        path = path.split('#', 1)[0]
         path = posixpath.normpath(unquote(path))
         words = path.split('/')
         words = filter(None, words)
@@ -133,17 +134,41 @@ class Pip2PiHeavyTests(unittest.TestCase):
         if self._temp_dir is not None:
             shutil.rmtree(self._temp_dir)
 
-    def assertDirsEqual(self, a, b):
-        res = subprocess.call(["diff", "-x", "*", "-r", a, b])
-        if res:
-            with chdir(a):
-                print("1st directory:", a)
-                subprocess.call(["find", "."])
-            with chdir(b):
-                print("2nd directory:", b)
-                subprocess.call(["find", "."])
-            raise AssertionError("Directories %r and %r differ! (see errors "
-                                 "printed to stdout)" %(a, b))
+    def assertDirContents(self, expected_contents, dir):
+        with open(expected_contents) as f:
+            expected = f.read().splitlines()
+
+        def describe(f):
+            try:
+                link = os.readlink(f)
+            except OSError as e:
+                if e.errno != 22:
+                    raise
+            else:
+                f += " -> " + link
+            return f
+
+        with chdir(dir):
+            actual = [
+                describe(x[2:]) for x in
+                sp.check_output(["find", "."]).splitlines()
+                if x[2:]
+            ]
+
+        expected.sort()
+        actual.sort()
+
+        if actual != expected:
+            print("\n" + "=" * 80 + "\n")
+            for line in difflib.unified_diff(expected, actual,
+                                             fromfile=expected_contents,
+                                             tofile="actual"):
+                print(line.rstrip())
+            print("\n" + "=" * 80 + "\n")
+            raise AssertionError(
+                "Output dir does not contain the files listed in %s (see errors on stdout)"
+                %(expected_contents, )
+            )
 
     @property
     def temp_dir(self):
@@ -166,21 +191,41 @@ class Pip2PiHeavyTests(unittest.TestCase):
             "-r", "test_requirements_txt/requirements.txt",
         ])
         self.assertEqual(res, 0)
-        self.assertDirsEqual("test_requirements_txt/expected/", self.temp_dir)
+        self.assertDirContents("test_requirements_txt/expected-normal.txt", self.temp_dir)
+
+    def test_requirements_txt_with_aggressive_normalization(self):
+        res = self.exc("pip2pi", [
+            self.temp_dir,
+            self.index_url,
+            "--aggressive-normalization",
+            "-r", "test_requirements_txt/requirements.txt",
+        ])
+        self.assertEqual(res, 0)
+        self.assertDirContents("test_requirements_txt/expected-aggressively-normalized.txt",
+                               self.temp_dir)
 
     def test_eggs_in_packages(self):
         shutil.copy("test_eggs_in_packages/fish-1.1-py2.7.egg", self.temp_dir)
         self.exc("dir2pi", [self.temp_dir])
-        self.assertDirsEqual("test_eggs_in_packages/", self.temp_dir)
+        self.assertDirContents("expected-eggs-in-packages.txt", self.temp_dir)
 
     def test_wheels(self):
         res = self.exc("pip2tgz", [
             self.temp_dir,
             self.index_url,
-            "-r", "test_wheels/requirements.txt",
+            "wheel",
         ])
         self.assertEqual(res, 0)
-        self.assertDirsEqual('test_wheels/expected/', self.temp_dir)
+        self.assertDirContents('expected-test_wheels.txt', self.temp_dir)
+
+    def test_get_source_with_wheels(self):
+        res = self.exc("pip2pi", [
+            self.temp_dir,
+            self.index_url,
+            "-z", "six",
+        ])
+        self.assertEqual(res, 0)
+        self.assertDirContents('expected-test_get_source_with_wheels.txt', self.temp_dir)
 
 
 class TestIsRemoteTarget(unittest.TestCase):

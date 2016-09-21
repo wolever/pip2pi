@@ -1,0 +1,11 @@
+fish-1.1.tar.gz
+Normalization_Test.with-dashes-1.2rc3.zip
+simple
+simple/fish
+simple/fish/fish-1.1.tar.gz -> ../../fish-1.1.tar.gz
+simple/fish/index.html
+simple/index.html
+simple/normalization-test-with-dashes
+simple/normalization-test-with-dashes/index.html
+simple/normalization-test-with-dashes/Normalization-Test.with-dashes-1.2rc3.zip -> ../../Normalization_Test.with-dashes-1.2rc3.zip
+simple/normalization-test.with-dashes -> normalization-test-with-dashes

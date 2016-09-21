@@ -1,0 +1,6 @@
+fish-1.1-py2.7.egg
+simple
+simple/fish
+simple/fish/fish-1.1-py2.7.egg -> ../../fish-1.1-py2.7.egg
+simple/fish/index.html
+simple/index.html

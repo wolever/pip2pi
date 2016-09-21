@@ -1,0 +1,8 @@
+simple
+simple/index.html
+simple/six
+simple/six/index.html
+simple/six/six-1.10.0-py2.py3-none-any.whl -> ../../six-1.10.0-py2.py3-none-any.whl
+simple/six/six-1.10.0.tar.gz -> ../../six-1.10.0.tar.gz
+six-1.10.0-py2.py3-none-any.whl
+six-1.10.0.tar.gz
