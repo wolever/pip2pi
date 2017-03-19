@@ -1,4 +1,4 @@
-0.7.0 (TBD)
+0.7.0 (2017-03-19)
     * Correctly normalize package names according to PEP-503 (thanks to
       @aiman-alsari, @jstelzer, and many others).
     * Add --aggressive-normalization option which will create a few different
