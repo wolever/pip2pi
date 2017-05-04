@@ -218,6 +218,11 @@ class Pip2PiOptionParser(optparse.OptionParser):
         self.add_option(
             '-v', '--verbose', dest="verbose", action="store_true")
 
+    def add_wheel_index_options(self):
+        self.add_option(
+            '-w', '--wheel', action='store_true',
+            help='Download and build wheels only with the `pip wheel` command.')
+
     def _process_args(self, largs, rargs, values):
         """
         An unknown option pass-through implementation of OptionParser.
@@ -394,6 +399,7 @@ def pip2tgz(argv=sys.argv):
                     --index-url https://example.com/simple \\
                     bar==3.1
         """))
+    parser.add_wheel_index_options()
 
     option, argv = parser.parse_args(argv)
     if len(argv) < 3:
@@ -410,7 +416,10 @@ def pip2tgz(argv=sys.argv):
     pkg_file_set = lambda: set(globall(full_glob_paths))
     old_pkgs = pkg_file_set()
 
-    pip_run_command(['install', '-d', outdir] + argv[2:])
+    if option.wheel:
+        pip_run_command(['wheel', '--wheel-dir', outdir] + argv[2:])
+    else:
+        pip_run_command(['install', '-d', outdir] + argv[2:])
 
     os.chdir(outdir)
     new_pkgs = pkg_file_set() - old_pkgs
@@ -507,6 +516,7 @@ def pip2pi(argv=sys.argv):
 
         """))
     parser.add_index_options()
+    parser.add_wheel_index_options()
 
     option, argv = parser.parse_args(argv)
     if len(argv) < 3:
@@ -524,6 +534,8 @@ def pip2pi(argv=sys.argv):
         working_dir = os.path.abspath(target)
 
     subcmd_argv = [argv[0], working_dir] + pip_argv
+    if option.wheel:
+        subcmd_argv += ['--wheel']
     res = pip2tgz(subcmd_argv)
     if res:
         print("pip2tgz returned an error; aborting.")
