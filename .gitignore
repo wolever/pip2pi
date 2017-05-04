@@ -58,3 +58,6 @@ tags
 
 # ETags
 TAGS
+
+# pyenv
+.python-version
