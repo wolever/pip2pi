@@ -243,10 +243,16 @@ class Pip2PiHeavyTests(unittest.TestCase):
         self.assertEqual(res, 0)
         self.assertDirContents('expected-test_get_source_with_wheels.txt', self.temp_dir)
 
-    def test_building_wheels_only(self):
-        res = self.exc('pip2tgz', [self.temp_dir, self.index_url, '--wheel', 'fish'])
+    def test_building_wheels(self):
+        res = self.exc(
+            'pip2tgz',
+            [self.temp_dir, self.index_url, '--wheel', '--also-get-source', 'fish']
+        )
         self.assertEqual(res, 0)
-        self.assertIn('fish-1.1-py2-none-any.whl', os.listdir(self.temp_dir))
+        print os.listdir(self.temp_dir)
+        artifacts = os.listdir(self.temp_dir)
+        self.assertIn('fish-1.1-py2-none-any.whl', artifacts)
+        self.assertIn('fish-1.1.tar.gz', artifacts)
 
 
 class TestIsRemoteTarget(unittest.TestCase):

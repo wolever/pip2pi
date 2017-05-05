@@ -200,13 +200,6 @@ class Pip2PiOptionParser(optparse.OptionParser):
                 package/module versions continue to be available.
             """))
         self.add_option(
-            '-z', '--also-get-source', dest="get_source", action="store_true",
-            default=False, help=dedent("""
-                In addition to downloading wheels, eggs or any other package
-                format also download the source tar.gz files in case the
-                platform using this index does not support the wheel/egg/etc
-            """))
-        self.add_option(
             '-s', '--symlink', dest="use_symlink",
             default=OS_HAS_SYMLINK, action="store_true",
             help=dedent("""
@@ -219,6 +212,13 @@ class Pip2PiOptionParser(optparse.OptionParser):
             '-v', '--verbose', dest="verbose", action="store_true")
 
     def add_wheel_index_options(self):
+        self.add_option(
+            '-z', '--also-get-source', dest="get_source", action="store_true",
+            default=False, help=dedent("""
+                In addition to downloading wheels, eggs or any other package
+                format also download the source tar.gz files in case the
+                platform using this index does not support the wheel/egg/etc
+            """))
         self.add_option(
             '-w', '--wheel', action='store_true',
             help='Download and build wheels only with the `pip wheel` command.')
@@ -386,7 +386,7 @@ def pip2tgz(argv=sys.argv):
         description=dedent("""
             Where PACKAGES are any names accepted by pip (ex, `foo`,
             `foo==1.2`, `-r requirements.txt`), and [PIP_OPTIONS] can be any
-            options accepted by `pip install -d`.
+            options accepted by `pip download -d`.
 
             pip2tgz will download all packages required to install PACKAGES and
             save them to sanely-named tarballs or wheel files in OUTPUT_DIRECTORY.
@@ -418,8 +418,9 @@ def pip2tgz(argv=sys.argv):
 
     if option.wheel:
         pip_run_command(['wheel', '--wheel-dir', outdir] + argv[2:])
-    else:
-        pip_run_command(['install', '-d', outdir] + argv[2:])
+    if option.get_source:
+        pip_run_command(['download', '-d', outdir, '--no-binary', ':all:'] + argv[2:])
+    pip_run_command(['download', '-d', outdir] + argv[2:])
 
     os.chdir(outdir)
     new_pkgs = pkg_file_set() - old_pkgs
@@ -494,7 +495,7 @@ def pip2pi(argv=sys.argv):
             package index will be built locally and rsync will be used to copy
             it to the remote host.
 
-            PIP_OPTIONS can be any options accepted by `pip install -d`, like
+            PIP_OPTIONS can be any options accepted by `pip download -d`, like
             `--index-url` or `--no-use-wheel`.
 
             For example, to create a remote index:
@@ -516,7 +517,6 @@ def pip2pi(argv=sys.argv):
 
         """))
     parser.add_index_options()
-    parser.add_wheel_index_options()
 
     option, argv = parser.parse_args(argv)
     if len(argv) < 3:
@@ -534,19 +534,11 @@ def pip2pi(argv=sys.argv):
         working_dir = os.path.abspath(target)
 
     subcmd_argv = [argv[0], working_dir] + pip_argv
-    if option.wheel:
-        subcmd_argv += ['--wheel']
     res = pip2tgz(subcmd_argv)
+
     if res:
         print("pip2tgz returned an error; aborting.")
         return res
-    if option.get_source:
-        subcmd_argv_source = subcmd_argv[:]
-        subcmd_argv_source.insert(2, '--no-use-wheel')
-        res = pip2tgz(subcmd_argv_source)
-        if res:
-            print("pip2tgz returned an error; aborting.")
-            return res
 
     res = _dir2pi(option, subcmd_argv)
     if res:
