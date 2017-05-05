@@ -246,10 +246,9 @@ class Pip2PiHeavyTests(unittest.TestCase):
     def test_building_wheels(self):
         res = self.exc(
             'pip2tgz',
-            [self.temp_dir, self.index_url, '--wheel', '--also-get-source', 'fish']
+            [self.temp_dir, self.index_url, '--build-wheels', '--also-get-source', 'fish']
         )
         self.assertEqual(res, 0)
-        print os.listdir(self.temp_dir)
         artifacts = os.listdir(self.temp_dir)
         self.assertIn('fish-1.1-py2-none-any.whl', artifacts)
         self.assertIn('fish-1.1.tar.gz', artifacts)

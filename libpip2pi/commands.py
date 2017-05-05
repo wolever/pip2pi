@@ -220,8 +220,8 @@ class Pip2PiOptionParser(optparse.OptionParser):
                 platform using this index does not support the wheel/egg/etc
             """))
         self.add_option(
-            '-w', '--wheel', action='store_true',
-            help='Download and build wheels only with the `pip wheel` command.')
+            '-w', '--build-wheels', action='store_true',
+            help='Build wheels from source packages with `pip wheel`.')
 
     def _process_args(self, largs, rargs, values):
         """
@@ -416,7 +416,7 @@ def pip2tgz(argv=sys.argv):
     pkg_file_set = lambda: set(globall(full_glob_paths))
     old_pkgs = pkg_file_set()
 
-    if option.wheel:
+    if option.build_wheels:
         pip_run_command(['wheel', '--wheel-dir', outdir] + argv[2:])
     if option.get_source:
         pip_run_command(['download', '-d', outdir, '--no-binary', ':all:'] + argv[2:])
