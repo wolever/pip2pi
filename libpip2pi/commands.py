@@ -212,6 +212,7 @@ class Pip2PiOptionParser(optparse.OptionParser):
             '-v', '--verbose', dest="verbose", action="store_true")
 
     def add_wheel_index_options(self):
+        ''' Options related to downloading and building wheels '''
         self.add_option(
             '-z', '--also-get-source', dest="get_source", action="store_true",
             default=False, help=dedent("""
@@ -416,10 +417,13 @@ def pip2tgz(argv=sys.argv):
     pkg_file_set = lambda: set(globall(full_glob_paths))
     old_pkgs = pkg_file_set()
 
+    # download/compile wheels only
     if option.build_wheels:
         pip_run_command(['wheel', '--wheel-dir', outdir] + argv[2:])
+    # download source tarballs only
     if option.get_source:
         pip_run_command(['download', '-d', outdir, '--no-binary', ':all:'] + argv[2:])
+    # let index decide what to download
     pip_run_command(['download', '-d', outdir] + argv[2:])
 
     os.chdir(outdir)
