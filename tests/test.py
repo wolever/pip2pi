@@ -250,7 +250,7 @@ class Pip2PiHeavyTests(unittest.TestCase):
         )
         self.assertEqual(res, 0)
         artifacts = os.listdir(self.temp_dir)
-        self.assertIn('fish-1.1-py2-none-any.whl', artifacts)
+        self.assertIn('fish-1.1-py{}-none-any.whl'.format(sys.version_info.major), artifacts)
         self.assertIn('fish-1.1.tar.gz', artifacts)
 
 

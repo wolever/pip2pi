@@ -387,7 +387,7 @@ def pip2tgz(argv=sys.argv):
         description=dedent("""
             Where PACKAGES are any names accepted by pip (ex, `foo`,
             `foo==1.2`, `-r requirements.txt`), and [PIP_OPTIONS] can be any
-            options accepted by `pip download -d`.
+            options accepted by `pip install -d`.
 
             pip2tgz will download all packages required to install PACKAGES and
             save them to sanely-named tarballs or wheel files in OUTPUT_DIRECTORY.
@@ -422,9 +422,9 @@ def pip2tgz(argv=sys.argv):
         pip_run_command(['wheel', '--wheel-dir', outdir] + argv[2:])
     # download source tarballs only
     if option.get_source:
-        pip_run_command(['download', '-d', outdir, '--no-binary', ':all:'] + argv[2:])
+        pip_run_command(['install', '-d', outdir, '--no-use-wheel'] + argv[2:])
     # let index decide what to download
-    pip_run_command(['download', '-d', outdir] + argv[2:])
+    pip_run_command(['install', '-d', outdir] + argv[2:])
 
     os.chdir(outdir)
     new_pkgs = pkg_file_set() - old_pkgs
@@ -499,7 +499,7 @@ def pip2pi(argv=sys.argv):
             package index will be built locally and rsync will be used to copy
             it to the remote host.
 
-            PIP_OPTIONS can be any options accepted by `pip download -d`, like
+            PIP_OPTIONS can be any options accepted by `pip install -d`, like
             `--index-url` or `--no-use-wheel`.
 
             For example, to create a remote index:
