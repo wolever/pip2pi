@@ -198,7 +198,7 @@ class Pip2PiHeavyTests(unittest.TestCase):
 
     def exc(self, cmd, args):
         print("Running %s with: %s" %(cmd, args))
-        return getattr(pip2pi_commands, cmd)([cmd] + args)
+        return getattr(pip2pi_commands, cmd)(argv=[cmd] + args)
 
     def test_requirements_txt(self):
         res = self.exc("pip2pi", [

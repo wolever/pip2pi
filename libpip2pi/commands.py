@@ -214,15 +214,15 @@ class Pip2PiOptionParser(optparse.OptionParser):
     def add_wheel_index_options(self):
         ''' Options related to downloading and building wheels '''
         self.add_option(
+            '-w', '--build-wheels', action='store_true',
+            help='Build wheels from source packages with `pip wheel`.')
+        self.add_option(
             '-z', '--also-get-source', dest="get_source", action="store_true",
             default=False, help=dedent("""
                 In addition to downloading wheels, eggs or any other package
                 format also download the source tar.gz files in case the
                 platform using this index does not support the wheel/egg/etc
             """))
-        self.add_option(
-            '-w', '--build-wheels', action='store_true',
-            help='Build wheels from source packages with `pip wheel`.')
 
     def _process_args(self, largs, rargs, values):
         """
@@ -380,7 +380,7 @@ def globall(globs):
     return result
 
 @maintain_cwd
-def pip2tgz(argv=sys.argv):
+def pip2tgz(argv=sys.argv, option=None):
     glob_exts = ['*.whl', '*.tgz', '*.gz']
     parser = Pip2PiOptionParser(
         usage="usage: %prog OUTPUT_DIRECTORY [PIP_OPTIONS] PACKAGES ...",
@@ -400,9 +400,11 @@ def pip2tgz(argv=sys.argv):
                     --index-url https://example.com/simple \\
                     bar==3.1
         """))
-    parser.add_wheel_index_options()
+    # dont parse args when called with options already parsed
+    if not option:
+        parser.add_wheel_index_options()
+        option, argv = parser.parse_args(argv)
 
-    option, argv = parser.parse_args(argv)
     if len(argv) < 3:
         parser.print_help()
         parser.exit()
@@ -417,14 +419,15 @@ def pip2tgz(argv=sys.argv):
     pkg_file_set = lambda: set(globall(full_glob_paths))
     old_pkgs = pkg_file_set()
 
+    # let index decide what to download unless forcing wheels and tarballs
+    if not (option.build_wheels and option.get_source):
+        pip_run_command(['install', '-d', outdir] + argv[2:])
     # download/compile wheels only
     if option.build_wheels:
         pip_run_command(['wheel', '--wheel-dir', outdir] + argv[2:])
     # download source tarballs only
     if option.get_source:
         pip_run_command(['install', '-d', outdir, '--no-use-wheel'] + argv[2:])
-    # let index decide what to download
-    pip_run_command(['install', '-d', outdir] + argv[2:])
 
     os.chdir(outdir)
     new_pkgs = pkg_file_set() - old_pkgs
@@ -521,6 +524,7 @@ def pip2pi(argv=sys.argv):
 
         """))
     parser.add_index_options()
+    parser.add_wheel_index_options()
 
     option, argv = parser.parse_args(argv)
     if len(argv) < 3:
@@ -538,7 +542,7 @@ def pip2pi(argv=sys.argv):
         working_dir = os.path.abspath(target)
 
     subcmd_argv = [argv[0], working_dir] + pip_argv
-    res = pip2tgz(subcmd_argv)
+    res = pip2tgz(argv=subcmd_argv, option=option)
 
     if res:
         print("pip2tgz returned an error; aborting.")
