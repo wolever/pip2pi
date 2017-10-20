@@ -337,7 +337,17 @@ def _dir2pi(option, argv):
             try_symlink(option, pkg_dir_name, pkgdirpath("simple", normalize_pip67(pkg_name)))
             try_symlink(option, pkg_dir_name, pkgdirpath("simple", pkg_name))
 
-        pkg_new_basename = "-".join([pkg_name, pkg_rest])
+        # If a package name has a '-' in it, the binary filenames should have '_'.
+        # Ex: https://pypi.python.org/simple/msgpack-python/
+        #     msgpack_python-0.2.0-py2.7-win-amd64.egg
+        #     msgpack_python-0.4.7-cp27-none-win32.whl
+        #     msgpack-python-0.4.7.tar.gz
+        # Note that the PACKAGE in the /simple/PACKAGE/ part of the URL has
+        # hyphens but the filename does not for the binary packages.
+        if pkg_rest.endswith('.whl') or pkg_rest.endswith('.egg'):
+            pkg_new_basename = "-".join([pkg_name.replace('-', '_'), pkg_rest])
+        else:
+            pkg_new_basename = "-".join([pkg_name, pkg_rest])
         symlink_target = os.path.join(pkg_dir, pkg_new_basename)
         symlink_source = os.path.join("../../", pkg_basename)
         if option.use_symlink:
