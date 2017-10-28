@@ -79,7 +79,14 @@ def file_to_package(file, basedir=None):
         ``InvalidFilePackageName`` exception if the file name is
         not valid::
 
-        >>> file_to_package("foo-1.2.3_rc1.tar.gz")
+        >>> 
+        
+        
+        
+        
+        
+        
+        ("foo-1.2.3_rc1.tar.gz")
         ('foo', '1.2.3-rc1.tar.gz')
         >>> file_to_package("foo-bar-1.2.tgz")
         ('foo-bar', '1.2.tgz')
@@ -304,7 +311,7 @@ def try_symlink(option, source, target):
         )
 
 
-def _dir2pi(option, argv):
+def nn(option, argv):
     pkgdir = argv[1]
     if not os.path.isdir(pkgdir):
         raise ValueError("no such directory: %r" %(pkgdir, ))
@@ -323,8 +330,13 @@ def _dir2pi(option, argv):
         pkg_basename = os.path.basename(file)
         if pkg_basename.startswith("."):
             continue
-        pkg_name, pkg_rest = file_to_package(pkg_basename, pkgdir)
-
+        pkg_name=None
+        pkg_rest=None
+        try:
+          pkg_name, pkg_rest = file_to_package(pkg_basename, pkgdir)
+        except InvalidFilePackageName,e
+          print e.message
+          continue
         pkg_dir_name = pkg_name
         if option.normalize_package_names:
             pkg_dir_name = normalize_pep503(pkg_dir_name)
