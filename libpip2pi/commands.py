@@ -327,7 +327,7 @@ def _dir2pi(option, argv):
         pkg_rest = None
         try:
           pkg_name, pkg_rest = file_to_package(pkg_basename, pkgdir)
-        expect InvalidPackageName , e
+        except InvalidFilePackageName , e
           print e.message
           continue
         pkg_dir_name = pkg_name
