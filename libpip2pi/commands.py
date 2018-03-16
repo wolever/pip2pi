@@ -327,7 +327,14 @@ def _dir2pi(option, argv):
             continue
         pkg_name, pkg_rest = file_to_package(pkg_basename, pkgdir)
 
-        pkg_dir_name = pkg_name
+        # FIXME: A hack to workaround what are considered safe names for
+        # distributions in wheels vs standard distribution names.
+        # https://github.com/pypa/setuptools/blob/16187afb3f532199f4951801d4e39939c560facc/pkg_resources/__init__.py#L1416-L1421
+        if file.endswith(".whl"):
+            pkg_dir_name = pkg_resources.safe_name(pkg_name)
+        else:
+            pkg_dir_name = pkg_name
+
         if option.normalize_package_names:
             pkg_dir_name = normalize_pep503(pkg_dir_name)
 
