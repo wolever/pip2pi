@@ -345,7 +345,7 @@ def _dir2pi(option, argv):
             try_symlink(option, symlink_source, symlink_target)
         else:
             if option.verbose:
-                print('copying %s to %s' % (symlink_target, pkg_filepath))
+                print('copying %s to %s' % (pkg_filepath, symlink_target))
             shutil.copy2(pkg_filepath, symlink_target)
 
         if pkg_name not in processed_pkg:
