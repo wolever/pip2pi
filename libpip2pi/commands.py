@@ -115,7 +115,8 @@ def file_to_package(file, basedir=None):
     elif file_ext == ".whl":
         bits = file.rsplit("-", 4)
         split = (bits[0], "-".join(bits[1:]))
-        # Correctly escape filenames according to PEP 427.
+        # Correctly escape filenames according to PEP 427:
+        # https://www.python.org/dev/peps/pep-0427/#escaping-and-unicode
         to_safe_name = lambda x: re.sub("[^\w\d.]+", "_", x, re.UNICODE)
         to_safe_rest = lambda x: x
     else:
