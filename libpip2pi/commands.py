@@ -115,7 +115,8 @@ def file_to_package(file, basedir=None):
     elif file_ext == ".whl":
         bits = file.rsplit("-", 4)
         split = (bits[0], "-".join(bits[1:]))
-        to_safe_name = pkg_resources.safe_name
+        # Correctly escape filenames according to PEP 427.
+        to_safe_name = lambda x: re.sub("[^\w\d.]+", "_", x, re.UNICODE)
         to_safe_rest = lambda x: x
     else:
         match = re.search(r"(?P<pkg>.*?)-(?P<rest>\d+.*)", file)
