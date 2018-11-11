@@ -1,3 +1,8 @@
+0.8.0 (TBD)
+    * Fixed issues when working with pip>=10.0.0.
+    * Removed the use of `--download` with `pip install`. Removes deprication warning.
+    * Added specific handling for various pip versions.
+
 0.7.0 (2017-03-19)
     * Correctly normalize package names according to PEP-503 (thanks to
       @aiman-alsari, @jstelzer, and many others).
