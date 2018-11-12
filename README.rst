@@ -183,6 +183,22 @@ index in your Windows, Linux, or Mac file system::
 Note the triple ``///`` after ``file:`` -- two for the protocol,
 the third for the root of the local file system.
 
+How to get multiple links/indexs working?
+-----------------------------------------
+
+First, add this to your `~/.config/pip/pip.config` file:
+
+    [global]
+    timeout = 3
+    index-url = http://example.com/packages/simple
+    trusted-host = example.com
+                   pypi.org
+    extra-index-url= https://pypi.org/simple
+    find-links = 
+        http://example.com/packages/simple
+        https://pypi.org/simple
+
+Note that the `timeout` options is really important as every single package that you do not have in your local repository will trigger it.
 
 Keywords
 ========
