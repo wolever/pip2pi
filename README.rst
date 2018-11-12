@@ -194,9 +194,6 @@ First, add this to your `~/.config/pip/pip.config` file:
     trusted-host = example.com
                    pypi.org
     extra-index-url= https://pypi.org/simple
-    find-links = 
-        http://example.com/packages/simple
-        https://pypi.org/simple
 
 Note that the `timeout` options is really important as every single package that you do not have in your local repository will trigger it.
 
