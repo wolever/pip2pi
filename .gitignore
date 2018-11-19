@@ -38,6 +38,11 @@ nosetests.xml
 .ropeproject
 *_flymake.py
 
+# virtualenv
+.venv
+venv/
+ENV/
+
 # Emacs stuff
 *~
 \#*#
