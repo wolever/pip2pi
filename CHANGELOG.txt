@@ -1,6 +1,6 @@
-0.8.0 (TBD)
+0.8.0 (2018-11-19)
     * Fixed issues when working with pip>=10.0.0.
-    * Removed the use of `--download` with `pip install`. Removes deprication warning.
+    * Removed the use of `--download` with `pip install`. Removes deprecation warning.
     * Added specific handling for various pip versions.
 
 0.7.0 (2017-03-19)
