@@ -7,4 +7,4 @@ simple/fish/index.html
 simple/index.html
 simple/normalization-test-with-dashes
 simple/normalization-test-with-dashes/index.html
-simple/normalization-test-with-dashes/Normalization-Test.with-dashes-1.2rc3.zip -> ../../Normalization_Test.with-dashes-1.2rc3.zip
+simple/normalization-test-with-dashes/Normalization_Test.with-dashes-1.2rc3.zip -> ../../Normalization_Test.with-dashes-1.2rc3.zip
