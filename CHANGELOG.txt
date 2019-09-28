@@ -1,3 +1,7 @@
+0.8.1 (2019-09-29)
+    * Changed dir2pi to use original file name in file link.
+      (https://github.com/wolever/pip2pi/pull/85; thanks @tikank)
+
 0.8.0 (2018-11-19)
     * Fixed issues when working with pip>=10.0.0.
     * Removed the use of `--download` with `pip install`. Removes deprecation warning.
