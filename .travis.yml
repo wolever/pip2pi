@@ -10,9 +10,11 @@ matrix:
         env: TOX_ENV=py34
       - python: 3.5
         env: TOX_ENV=py35
+      - python: 3.7
+        env: TOX_ENV=py37
       - python: pypy
         env: TOX_ENV=pypy
 install:
-  - pip install tox==2.0.2
+  - pip install tox==3.14.0
 script:
   - tox -e $TOX_ENV
