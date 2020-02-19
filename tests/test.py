@@ -30,7 +30,7 @@ BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 PKG_BASE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "../")
 sys.path.append(PKG_BASE_PATH)
 
-from libpip2pi import commands as pip2pi_commands
+from pip2pi import commands as pip2pi_commands
 
 class chdir(object):
     """ A drop-in replacement for ``os.chdir`` which also acts as a context

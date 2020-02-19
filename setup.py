@@ -12,8 +12,8 @@ try:
 except IOError:
     long_description = "See https://github.com/wolever/pip2pi"
 
-import libpip2pi
-version = ".".join(map(str, libpip2pi.__version__))
+import pip2pi
+version = ".".join(map(str, pip2pi.__version__))
 
 setup(
     name="pip2pi",
@@ -28,9 +28,9 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'dir2pi = libpip2pi.commands:dir2pi',
-            'pip2pi = libpip2pi.commands:pip2pi',
-            'pip2tgz = libpip2pi.commands:pip2tgz',
+            'dir2pi = pip2pi.commands:dir2pi',
+            'pip2pi = pip2pi.commands:pip2pi',
+            'pip2tgz = pip2pi.commands:pip2tgz',
         ],
     },
     install_requires=[
