@@ -19,6 +19,11 @@ try:
 except ImportError:
     has_wheel = False
 
+try:
+    import html
+    cgi.escape = html.escape
+except ImportError:
+    pass
 
 def try_int(x):
     try:
