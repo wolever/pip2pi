@@ -373,7 +373,7 @@ def _dir2pi(option, argv):
             shutil.copy2(pkg_filepath, symlink_target)
 
         if pkg_name not in processed_pkg:
-            pkg_index += "<a href='%s/'>%s</a><br />\n" %(
+            pkg_index += "<a href='%s/index.html'>%s</a><br />\n" %(
                 cgi.escape(pkg_dir_name),
                 cgi.escape(pkg_name),
             )
