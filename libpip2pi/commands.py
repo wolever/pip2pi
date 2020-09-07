@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import os
 import re
 import sys
@@ -12,6 +14,12 @@ from subprocess import check_call
 import pkg_resources
 import glob
 import optparse
+import six
+
+if not six.PY2:
+    from html import escape as html_escape
+else:
+    from cgi import escape as html_escape
 
 try:
     import wheel as _; _
@@ -374,15 +382,15 @@ def _dir2pi(option, argv):
 
         if pkg_name not in processed_pkg:
             pkg_index += "<a href='%s/'>%s</a><br />\n" %(
-                cgi.escape(pkg_dir_name),
-                cgi.escape(pkg_name),
+                html_escape(pkg_dir_name),
+                html_escape(pkg_name),
             )
             processed_pkg.add(pkg_name)
 
         if option.build_html:
             with open(os.path.join(pkg_dir, "index.html"), "a") as fp:
                 fp.write("<a href='%(name)s'>%(name)s</a><br />\n" %{
-                    "name": cgi.escape(pkg_basename),
+                    "name": html_escape(pkg_basename),
                 })
     pkg_index += "</body></html>\n"
 
