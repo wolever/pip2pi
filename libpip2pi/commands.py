@@ -151,7 +151,9 @@ def file_to_package(file, basedir=None):
     elif file_ext == ".whl":
         bits = file.rsplit("-", 4)
         split = (bits[0], "-".join(bits[1:]))
-        to_safe_name = pkg_resources.safe_name
+        # Correctly escape filenames according to PEP 427:
+        # https://www.python.org/dev/peps/pep-0427/#escaping-and-unicode
+        to_safe_name = lambda x: re.sub("[^\w\d.]+", "_", x, re.UNICODE)
         to_safe_rest = lambda x: x
     else:
         match = re.search(r"(?P<pkg>.*?)-(?P<rest>\d+.*)", file)
@@ -355,7 +357,14 @@ def _dir2pi(option, argv):
             continue
         pkg_name, pkg_rest = file_to_package(pkg_basename, pkgdir)
 
-        pkg_dir_name = pkg_name
+        # FIXME: A hack to workaround what are considered safe names for
+        # distributions in wheels vs standard distribution names.
+        # https://github.com/pypa/setuptools/blob/16187afb3f532199f4951801d4e39939c560facc/pkg_resources/__init__.py#L1416-L1421
+        if file.endswith(".whl"):
+            pkg_dir_name = pkg_resources.safe_name(pkg_name)
+        else:
+            pkg_dir_name = pkg_name
+
         if option.normalize_package_names:
             pkg_dir_name = normalize_pep503(pkg_dir_name)
 
@@ -373,7 +382,7 @@ def _dir2pi(option, argv):
             try_symlink(option, symlink_source, symlink_target)
         else:
             if option.verbose:
-                print('copying %s to %s' % (symlink_target, pkg_filepath))
+                print('copying %s to %s' % (pkg_filepath, symlink_target))
             shutil.copy2(pkg_filepath, symlink_target)
 
         if pkg_name not in processed_pkg:
