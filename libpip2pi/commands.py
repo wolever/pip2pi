@@ -149,7 +149,7 @@ def file_to_package(file, basedir=None):
         to_safe_name = lambda x: x
         to_safe_rest = lambda x: x
     elif file_ext == ".whl":
-        bits = file.rsplit("-", 4)
+        bits = file.rsplit("-", 5)
         split = (bits[0], "-".join(bits[1:]))
         to_safe_name = pkg_resources.safe_name
         to_safe_rest = lambda x: x
