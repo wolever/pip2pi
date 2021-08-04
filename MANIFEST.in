@@ -1,1 +1,12 @@
 include README.rst
+CHANGELOG.txt
+LICENSE.txt
+tox.ini
+run-tests
+recursive-include tests *.egg
+recursive-include tests *.gz
+recursive-include tests *.html
+recursive-include tests *.py
+recursive-include tests *.txt
+recursive-include tests *.whl
+recursive-include tests *.zip
