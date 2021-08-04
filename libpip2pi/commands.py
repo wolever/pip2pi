@@ -43,7 +43,11 @@ except ImportError:
 
 
 if pip_version:
-    if pip_version >= (10, 0, 0):
+    if pip_version >= (19, 3, 1):
+        from pip._internal.main import main as pip_main
+        pip_download_command = 'download --dest'
+        pip_no_binary_command = '--no-binary=:all:'
+    elif pip_version >= (10, 0, 0):
         from pip._internal import main as pip_main
         pip_download_command = 'download --dest'
         pip_no_binary_command = '--no-binary=:all:'
