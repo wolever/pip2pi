@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import shutil
+import fnmatch
 import atexit
 import tempfile
 import warnings
@@ -230,6 +231,11 @@ class Pip2PiOptionParser(optparse.OptionParser):
                 package/module versions continue to be available.
             """))
         self.add_option(
+            '-X', '--exclude', dest="exclude", metavar="SHELLGLOB",
+            help=dedent("""
+                Exclude files in PACKAGE_DIR whose basename matches SHELLGLOB.
+            """))
+        self.add_option(
             '-z', '--also-get-source', dest="get_source", action="store_true",
             default=False, help=dedent("""
                 In addition to downloading wheels, eggs or any other package
@@ -352,6 +358,8 @@ def _dir2pi(option, argv):
             continue
         pkg_basename = os.path.basename(file)
         if pkg_basename.startswith("."):
+            continue
+        if option.exclude and fnmatch.fnmatchcase(pkg_basename, option.exclude):
             continue
         pkg_name, pkg_rest = file_to_package(pkg_basename, pkgdir)
 
