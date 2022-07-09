@@ -369,6 +369,7 @@ def _dir2pi(option, argv):
 
         symlink_target = os.path.join(pkg_dir, pkg_basename)
         symlink_source = os.path.join("../../", pkg_basename)
+        symlink_source = os.path.normpath(symlink_source)
         if option.use_symlink:
             try_symlink(option, symlink_source, symlink_target)
         else:
